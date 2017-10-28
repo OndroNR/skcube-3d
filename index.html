@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>skCube info site</title>
+  <script src="Cesium/Cesium.js"></script>
+  <style>
+      @import url(Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
+  <script src="satellite.min.js"></script>
+</head>
+<body>
+  <div id="cesiumContainer"</div>
+  <script>
+    Cesium.BingMapsApi.defaultKey = "AnFv791mfQ56HR0rdPaCieUIf_Jjw0cb23Ag4hcAUKWcuyV61VTYIDnBDK27xCt8"
+    var viewer = new Cesium.Viewer('cesiumContainer');
+    viewer.camera.flyHome(0);
+
+    var tleLine1 = '1 42789U 17036AA  17183.54923602  .00001319  00000-0  63176-4 0  9999',
+    tleLine2 = '2 42789  97.4492 243.2057 0011177 214.2458 145.8057 15.20670990  1351';
+    // Initialize a satellite record
+    var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
+    var positionAndVelocity = satellite.propagate(satrec, new Date());
+    var positionEci = positionAndVelocity.position;
+    var gmst = satellite.gstimeFromDate(new Date()),
+        positionGd    = satellite.eciToGeodetic(positionEci, gmst);
+    var longitude = positionGd.longitude,
+    latitude  = positionGd.latitude,
+    height    = positionGd.height;
+
+    function cartToCart(position) {
+      var cartesianPosition = Cesium.Ellipsoid.WGS84.cartographicToCartesian(position);
+      return cartesianPosition;
+    }
+
+    function getpos(t) {
+      var positionAndVelocity = satellite.propagate(satrec, new Date(t));
+      var positionEci = positionAndVelocity.position;
+      var gmst = satellite.gstimeFromDate(new Date(t)),
+          positionGd    = satellite.eciToGeodetic(positionEci, gmst);
+
+      return cartToCart(new Cesium.Cartographic(positionGd.longitude, positionGd.latitude, positionGd.height*1000));
+    };
+
+    function addMinutes(date, minutes) {
+        return new Date(date.getTime() + minutes*60000);
+    }
+
+    function calculate_orbit(t) {
+      var arr = [];
+      var tm = new Date(t);
+      for (m = -94/2; m < 2.5 * 94; m++) {
+          arr.push(getpos(addMinutes(tm, m)));
+      }
+      return arr;
+    }
+
+    // Viewer with GLOBE
+    var entity = viewer.entities.add({
+        position : new Cesium.CallbackProperty(getpos, true),
+        point : {
+          color : Cesium.Color.RED,
+          pixelSize : 10
+        }
+    });
+/*    var entity = viewer.entities.add({
+        position : new Cesium.CallbackProperty(getpos, true),
+        model : {
+            uri : 'skcube_asset/skcube.gltf'
+        }
+    });*/
+
+    var ba = viewer.entities.add({
+      name : 'Bratislava',
+      position : cartToCart(new Cesium.Cartographic(17.109722*3.14/180, 48.143889*3.14/180, 100)),
+      point : {
+        color : Cesium.Color.YELLOW,
+        pixelSize : 5
+      }
+    });
+
+    var orbit = viewer.entities.add({
+        name : 'orbit',
+        position : Cesium.Cartesian3(0, 0, 0),
+        polyline : {
+          positions : new Cesium.CallbackProperty(calculate_orbit, false),
+          material : Cesium.Color.GREEN,
+          width : new Cesium.ConstantProperty(2),
+          followSurface : new Cesium.ConstantProperty(false)
+
+        }
+    });
+//    viewer.trackedEntity = entity;
+
+
+
+  </script>
+
+/*
+  <div id="cesiumContainer2" style="width:600px;"></div>
+  <script>
+    Cesium.BingMapsApi.defaultKey = "AnFv791mfQ56HR0rdPaCieUIf_Jjw0cb23Ag4hcAUKWcuyV61VTYIDnBDK27xCt8"
+    var viewer2 = new Cesium.Viewer('cesiumContainer2');
+    // Viewer with GLOBE
+    var entity = viewer2.entities.add({
+        position : new Cesium.CallbackProperty(getpos, true),
+        point : {
+          color : Cesium.Color.RED,
+          pixelSize : 10
+        }
+    });
+/*    var entity = viewer2.entities.add({
+        position : new Cesium.CallbackProperty(getpos, true),
+        model : {
+            uri : 'skcube_asset/skcube.gltf'
+        }
+    });*/
+
+    var ba = viewer2.entities.add({
+      name : 'Bratislava',
+      position : cartToCart(new Cesium.Cartographic(17.109722*3.14/180, 48.143889*3.14/180, 100)),
+      point : {
+        color : Cesium.Color.YELLOW,
+        pixelSize : 5
+      }
+    });
+
+    var orbit = viewer2.entities.add({
+        name : 'orbit',
+        position : Cesium.Cartesian3(0, 0, 0),
+        polyline : {
+          positions : new Cesium.CallbackProperty(calculate_orbit, false),
+          material : Cesium.Color.GREEN,
+          width : new Cesium.ConstantProperty(2),
+          followSurface : new Cesium.ConstantProperty(false)
+
+        }
+    });
+//    viewer2.trackedEntity = entity;
+    viewer2.scene.mode = Cesium.SceneMode.SCENE2D;
+
+
+
+  </script>
+
+*/
+</body>
+</html>
