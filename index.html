@@ -63,6 +63,24 @@
       return arr;
     }
 
+    function calculate_orbit_trail(t) {
+      var arr = [];
+      var tm = new Date(t);
+      for (m = -94/2; m <= 0; m++) {
+          arr.push(getpos(addMinutes(tm, m)));
+      }
+      return arr;
+    }
+
+    function calculate_orbit_prediction(t) {
+      var arr = [];
+      var tm = new Date(t);
+      for (m = 0; m < 2.5 * 94; m++) {
+          arr.push(getpos(addMinutes(tm, m)));
+      }
+      return arr;
+    }
+
     // Viewer with GLOBE
     var entity = viewer.entities.add({
         position : new Cesium.CallbackProperty(getpos, true),
@@ -87,17 +105,40 @@
       }
     });
 
-    var orbit = viewer.entities.add({
+    var orbitTrail = viewer.entities.add({
         name : 'orbit',
         position : Cesium.Cartesian3(0, 0, 0),
         polyline : {
-          positions : new Cesium.CallbackProperty(calculate_orbit, false),
-          material : Cesium.Color.GREEN,
+          positions : new Cesium.CallbackProperty(calculate_orbit_trail, false),
+          material : new Cesium.StripeMaterialProperty({
+              evenColor: new Cesium.Color(0.3, 0.3, 0.3, 1.0),
+              oddColor: new Cesium.Color(0.3, 0.3, 0.3, 0.0),
+              repeat: 1,
+              offset: 0.2,
+              orientation: Cesium.StripeOrientation.VERTICAL
+          }),
           width : new Cesium.ConstantProperty(2),
           followSurface : new Cesium.ConstantProperty(false)
-
         }
     });
+
+    var orbitPrediction = viewer.entities.add({
+        name : 'orbit',
+        position : Cesium.Cartesian3(0, 0, 0),
+        polyline : {
+          positions : new Cesium.CallbackProperty(calculate_orbit_prediction, false),
+          material : new Cesium.StripeMaterialProperty({
+              evenColor: new Cesium.Color(0, 1.0, 0, 0.1),
+              oddColor: new Cesium.Color(0, 1.0, 0, 1.0),
+              repeat: 1,
+              offset: 0.2,
+              orientation: Cesium.StripeOrientation.VERTICAL
+          }),
+          width : new Cesium.ConstantProperty(2),
+          followSurface : new Cesium.ConstantProperty(false)
+        }
+    });
+
 //    viewer.trackedEntity = entity;
 
 
@@ -144,6 +185,7 @@
 
         }
     });
+
 //    viewer2.trackedEntity = entity;
     viewer2.scene.mode = Cesium.SceneMode.SCENE2D;
 
