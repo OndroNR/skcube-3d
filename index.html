@@ -24,8 +24,8 @@
     var viewer = new Cesium.Viewer('cesiumContainer');
     viewer.camera.flyHome(0);
 
-    var tleLine1 = '1 42789U 17036AA  17183.54923602  .00001319  00000-0  63176-4 0  9999',
-    tleLine2 = '2 42789  97.4492 243.2057 0011177 214.2458 145.8057 15.20670990  1351';
+    var tleLine1 = '1 42789U 17036AA  18292.91815924  .00001321  00000-0  60464-4 0  9999',
+    tleLine2 = '2 42789  97.3874 350.7118 0011742   7.5350 352.6060 15.22205544 73484';
     // Initialize a satellite record
     var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
     var positionAndVelocity = satellite.propagate(satrec, new Date());
