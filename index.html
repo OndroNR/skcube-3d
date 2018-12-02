@@ -145,55 +145,5 @@
 
 
   </script>
-
-/*
-  <div id="cesiumContainer2" style="width:600px;"></div>
-  <script>
-    Cesium.BingMapsApi.defaultKey = "AnFv791mfQ56HR0rdPaCieUIf_Jjw0cb23Ag4hcAUKWcuyV61VTYIDnBDK27xCt8"
-    var viewer2 = new Cesium.Viewer('cesiumContainer2');
-    // Viewer with GLOBE
-    var entity = viewer2.entities.add({
-        position : new Cesium.CallbackProperty(getpos, true),
-        point : {
-          color : Cesium.Color.RED,
-          pixelSize : 10
-        }
-    });
-/*    var entity = viewer2.entities.add({
-        position : new Cesium.CallbackProperty(getpos, true),
-        model : {
-            uri : 'skcube_asset/skcube.gltf'
-        }
-    });*/
-
-    var ba = viewer2.entities.add({
-      name : 'Bratislava',
-      position : cartToCart(new Cesium.Cartographic(17.109722*3.14/180, 48.143889*3.14/180, 100)),
-      point : {
-        color : Cesium.Color.YELLOW,
-        pixelSize : 5
-      }
-    });
-
-    var orbit = viewer2.entities.add({
-        name : 'orbit',
-        position : Cesium.Cartesian3(0, 0, 0),
-        polyline : {
-          positions : new Cesium.CallbackProperty(calculate_orbit, false),
-          material : Cesium.Color.GREEN,
-          width : new Cesium.ConstantProperty(2),
-          followSurface : new Cesium.ConstantProperty(false)
-
-        }
-    });
-
-//    viewer2.trackedEntity = entity;
-    viewer2.scene.mode = Cesium.SceneMode.SCENE2D;
-
-
-
-  </script>
-
-*/
 </body>
 </html>
