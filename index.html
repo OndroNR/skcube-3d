@@ -21,7 +21,15 @@
   <div id="cesiumContainer"</div>
   <script>
     Cesium.BingMapsApi.defaultKey = "AnFv791mfQ56HR0rdPaCieUIf_Jjw0cb23Ag4hcAUKWcuyV61VTYIDnBDK27xCt8"
-    var viewer = new Cesium.Viewer('cesiumContainer');
+    var viewer = new Cesium.Viewer('cesiumContainer', {
+      imageryProvider : new Cesium.BingMapsImageryProvider({
+          url : 'https://dev.virtualearth.net'
+      }),
+      geocoder : [
+              new Cesium.CartographicGeocoderService(),
+              new Cesium.BingMapsGeocoderService()
+      ]
+    });
     viewer.camera.flyHome(0);
 
     var tleLine1 = '1 42789U 17036AA  18334.85646779  .00001189  00000-0  54568-4 0  9999',
