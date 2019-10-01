@@ -20,7 +20,7 @@
 <body>
   <div id="cesiumContainer"></div>
   <script>
-    Cesium.BingMapsApi.defaultKey = "AnFv791mfQ56HR0rdPaCieUIf_Jjw0cb23Ag4hcAUKWcuyV61VTYIDnBDK27xCt8"
+    Cesium.BingMapsApi.defaultKey = "AnFv791mfQ56HR0rdPaCieUIf_Jjw0cb23Ag4hcAUKWcuyV61VTYIDnBDK27xCt8";
     var viewer = new Cesium.Viewer('cesiumContainer', {
       imageryProvider : new Cesium.BingMapsImageryProvider({
           url : 'https://dev.virtualearth.net'
@@ -66,7 +66,7 @@
     function calculate_orbit(t) {
       var arr = [];
       var tm = new Date(t);
-      for (m = -94/2; m < 2.5 * 94; m++) {
+      for (var m = -94/2; m < 2.5 * 94; m++) {
           arr.push(getpos(addMinutes(tm, m)));
       }
       return arr;
@@ -75,7 +75,7 @@
     function calculate_orbit_trail(t) {
       var arr = [];
       var tm = new Date(t);
-      for (m = -94/2; m <= 0; m++) {
+      for (var m = -94/2; m <= 0; m++) {
           arr.push(getpos(addMinutes(tm, m)));
       }
       return arr;
@@ -84,7 +84,7 @@
     function calculate_orbit_prediction(t) {
       var arr = [];
       var tm = new Date(t);
-      for (m = 0; m < 2.5 * 94; m++) {
+      for (var m = 0; m < 2.5 * 94; m++) {
           arr.push(getpos(addMinutes(tm, m)));
       }
       return arr;
